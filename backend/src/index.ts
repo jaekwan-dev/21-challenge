@@ -5,7 +5,7 @@ import authRouter from './routes/auth';
 import challengeRoutes from './routes/challenge';
 import { PrismaClient } from '@prisma/client';
 
-dotenv.config();n
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8080;
