@@ -16,7 +16,7 @@ const LoginSuccessPageContent = () => {
     if (userIdParam) {
       const fetchUserDetails = async () => {
         try {
-          const response = await fetch(`http://localhost:8080/auth/user-details/${userIdParam}`);
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/user-details/${userIdParam}`);
           if (!response.ok) {
             throw new Error('사용자 정보를 가져오는데 실패했습니다.');
           }

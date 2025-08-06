@@ -11,7 +11,7 @@ const app = express();
 const port = process.env.PORT || 8080;
 const prisma = new PrismaClient();
 
-app.use(cors({ origin: 'http://localhost:3000' })); // http://localhost:3000からのリクエストを許可
+app.use(cors({ origin: `${process.env.FRONTEND_URL}` })); // http://localhost:3000からのリクエストを許可
 app.use(express.json());
 
 // Prisma Client를 req 객체에 추가하여 라우트 핸들러에서 접근할 수 있도록 함
