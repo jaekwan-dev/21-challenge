@@ -228,6 +228,7 @@ router.get('/', async (req: Request, res) => {
           take: 5, // 최대 5명의 참여자만 가져옴
           orderBy: { startDate: 'desc' }, // 최신 참여자 순
           select: {
+            startDate: true, // startDate 추가
             user: {
               select: {
                 nickname: true,
