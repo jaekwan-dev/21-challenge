@@ -1,5 +1,5 @@
 import { Router, Request } from 'express';
-import { PrismaClient } from '../generated/prisma';
+import { PrismaClient } from '@prisma/client';
 
 const router = Router();
 
@@ -123,7 +123,7 @@ router.get('/:challengeId/community-status', async (req: Request, res) => {
       },
     });
 
-    const formattedCommunityData = communityData.map((data) => {
+    const formattedCommunityData = communityData.map((data: { userId: string; dailyStatus: any; user: { nickname: string | null; profilePictureUrl: string | null; } | null }) => {
       const completedDays = (data.dailyStatus as boolean[]).filter(Boolean).length;
       const completionRate = Math.floor((completedDays / 21) * 100);
       const nickname = data.user?.nickname || `익명 사용자 ${data.userId.substring(0, 4)}`; // 실제 닉네임 사용 또는 임시 닉네임
@@ -203,8 +203,8 @@ router.get('/:challengeId/participants', async (req: Request, res) => {
     });
 
     const formattedParticipants = participants
-      .filter(p => p.user !== null) // user가 null이 아닌 경우만 필터링
-      .map(p => ({
+      .filter((p: { user: { nickname: string | null; profilePictureUrl: string | null; } | null }) => p.user !== null) // user가 null이 아닌 경우만 필터링
+      .map((p: { user: { nickname: string | null; profilePictureUrl: string | null; } | null }) => ({
         nickname: p.user!.nickname,
         profilePictureUrl: p.user!.profilePictureUrl,
       }));
@@ -239,9 +239,9 @@ router.get('/', async (req: Request, res) => {
       },
     });
 
-    const formattedChallenges = challenges.map(challenge => ({
+    const formattedChallenges = challenges.map((challenge: { id: number; title: string; description: string | null; icon: string; color: string; bgGradient: string; duration: string; difficulty: string; createdAt: Date; _count: { userChallenges: number; }; userChallenges: { startDate: Date; user: { nickname: string | null; profilePictureUrl: string | null; } | null; }[]; }) => ({
       ...challenge,
-      participantsPreview: challenge.userChallenges.map(uc => uc.user),
+      participantsPreview: challenge.userChallenges.map((uc: { startDate: Date; user: { nickname: string | null; profilePictureUrl: string | null; } | null; }) => uc.user),
     }));
 
     res.status(200).json(formattedChallenges);
