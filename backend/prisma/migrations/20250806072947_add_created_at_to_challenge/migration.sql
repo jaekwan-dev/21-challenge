@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "public"."Challenge" ADD COLUMN     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ALTER COLUMN "description" DROP NOT NULL;

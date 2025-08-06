@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  kakaoId         String          @id @unique @map("id") // 카카오 ID를 주 식별자로 사용
+  email           String?         @unique
+  nickname        String
+  profilePictureUrl String?         @map("profile_picture_url")
+  userChallenges  UserChallenge[]
+
+  @@map("users") // 테이블 이름을 users로 명시
+}
+
+model Challenge {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  icon        String
+  color       String
+  bgGradient  String
+  duration    String
+  difficulty  String
+  createdAt   DateTime  @default(now())
+  userChallenges UserChallenge[]
+}
+
+model UserChallenge {
+  id          Int       @id @default(autoincrement())
+  userId      String
+  challengeId Int
+  dailyStatus Json // JSON 형식으로 21일간의 boolean 배열 저장
+  startDate   DateTime
+
+  user        User      @relation(fields: [userId], references: [kakaoId]) // User 모델의 kakaoId 참조
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+
+  @@unique([userId, challengeId]) // 한 사용자는 한 챌린지에 대해 하나의 기록만 가짐
+}

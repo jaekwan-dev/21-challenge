@@ -1,22 +1,34 @@
 "use client";
 
 import React from 'react';
+import { Button } from "@/components/ui/button";
+import { LogIn } from 'lucide-react';
 
 const LoginPage = () => {
   const handleKakaoLogin = () => {
-    // 백엔드의 카카오 로그인 시작 엔드포인트로 리다이렉트
     window.location.href = 'http://localhost:8080/auth/kakao';
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1 className="text-2xl font-bold mb-4">로그인</h1>
-      <button
-        onClick={handleKakaoLogin}
-        className="bg-yellow-400 text-black px-4 py-2 rounded-md shadow-md hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
-      >
-        카카오 로그인
-      </button>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center p-4">
+      <div className="bg-white p-8 rounded-lg shadow-xl text-center max-w-md w-full">
+        <div className="flex items-center justify-center mb-6">
+          <LogIn className="w-8 h-8 text-blue-600 mr-2" />
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            로그인
+          </h1>
+        </div>
+        <p className="text-lg text-slate-600 mb-8">
+          21일 챌린지를 시작하려면 카카오 계정으로 로그인해주세요.
+        </p>
+        <Button
+          onClick={handleKakaoLogin}
+          className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 rounded-lg transition-all duration-300 flex items-center justify-center"
+        >
+          <img src="/kakao_logo.svg" alt="Kakao Logo" className="w-5 h-5 mr-2" />
+          카카오 로그인
+        </Button>
+      </div>
     </div>
   );
 };
