@@ -3,6 +3,7 @@
 import React from 'react';
 import { useUser } from '../context/UserContext';
 import Link from 'next/link';
+import Image from 'next/image'; // Image 컴포넌트 임포트
 
 const Header = () => {
   const { user, setUser } = useUser();
@@ -23,10 +24,12 @@ const Header = () => {
         {user ? (
           <div className="flex items-center space-x-4">
             {user.profile_image && (
-              <img
+              <Image
                 src={user.profile_image}
                 alt="프로필 이미지"
                 className="w-8 h-8 rounded-full"
+                width={32} // 이미지 너비
+                height={32} // 이미지 높이
               />
             )}
             <span>{user.nickname}님</span>

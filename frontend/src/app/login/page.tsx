@@ -3,6 +3,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { LogIn } from 'lucide-react';
+import Image from 'next/image'; // Image 컴포넌트 임포트
 
 const LoginPage = () => {
   const handleKakaoLogin = () => {
@@ -25,7 +26,7 @@ const LoginPage = () => {
           onClick={handleKakaoLogin}
           className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 rounded-lg transition-all duration-300 flex items-center justify-center"
         >
-          <img src="/kakao_logo.svg" alt="Kakao Logo" className="w-5 h-5 mr-2" />
+          <Image src="/kakao_logo.svg" alt="Kakao Logo" className="w-5 h-5 mr-2" width={20} height={20} />
           카카오 로그인
         </Button>
       </div>

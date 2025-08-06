@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { CheckCircle, Sparkles, Droplets, Dumbbell, BookOpen, Code } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import Image from 'next/image'; // Image 컴포넌트 임포트
 import { useUser } from '@/context/UserContext';
 
 interface Challenge {
@@ -38,6 +39,31 @@ const ChallengeDetailPage = () => {
   const [completedDays, setCompletedDays] = useState(0); // 완료된 날짜 수
   const [startDate, setStartDate] = useState<string | null>(null); // 챌린지 시작 날짜
   const [communityStatus, setCommunityStatus] = useState<{ nickname: string; completionRate: number; profilePictureUrl?: string }[]>([]);
+
+  const updateChallengeStatusBackend = useCallback(async (status: boolean[], currentUserId: string, currentStartDate: string) => {
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/challenges/${challengeId}/status`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: currentUserId, dailyStatus: status, startDate: currentStartDate }),
+      });
+      console.log('챌린지 현황이 백엔드에 업데이트되었습니다.');
+    } catch (error) {
+      console.error('챌린지 현황 업데이트 실패:', error);
+    }
+  }, [challengeId]);
+
+  const fetchCommunityStatus = useCallback(async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/challenges/${challengeId}/community-status`);
+      const data = await response.json();
+      setCommunityStatus(data);
+    } catch (error) {
+      console.error('커뮤니티 현황 가져오기 실패:', error);
+    }
+  }, [challengeId]);
 
   useEffect(() => {
     const fetchChallengeDetails = async () => {
@@ -85,39 +111,14 @@ const ChallengeDetailPage = () => {
     fetchChallengeDetails();
     fetchUserChallengeStatus();
     fetchCommunityStatus(); // 컴포넌트 마운트 시 커뮤니티 현황 가져오기
-  }, [challengeId, user?.id]); // user.id를 의존성 배열에 추가
+  }, [challengeId, user?.id, fetchCommunityStatus, updateChallengeStatusBackend]);
 
   useEffect(() => {
     // 일일 진행 상황이 변경될 때마다 백엔드에 업데이트
     if (user?.id && startDate) { // user.id와 startDate가 있을 때만 백엔드에 업데이트
       updateChallengeStatusBackend(dailyStatus, user.id, startDate);
     }
-  }, [dailyStatus, challengeId, user?.id, startDate]);
-
-  const updateChallengeStatusBackend = async (status: boolean[], currentUserId: string, currentStartDate: string) => {
-    try {
-      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/challenges/${challengeId}/status`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userId: currentUserId, dailyStatus: status, startDate: currentStartDate }),
-      });
-      console.log('챌린지 현황이 백엔드에 업데이트되었습니다.');
-    } catch (error) {
-      console.error('챌린지 현황 업데이트 실패:', error);
-    }
-  };
-
-  const fetchCommunityStatus = async () => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/challenges/${challengeId}/community-status`);
-      const data = await response.json();
-      setCommunityStatus(data);
-    } catch (error) {
-      console.error('커뮤니티 현황 가져오기 실패:', error);
-    }
-  };
+  }, [dailyStatus, challengeId, user?.id, startDate, updateChallengeStatusBackend]);
 
   const handleDayClick = (dayIndex: number) => {
     if (!startDate) return; // startDate가 없으면 아무것도 하지 않음
@@ -177,10 +178,12 @@ const ChallengeDetailPage = () => {
         {user && (
           <div className="flex items-center justify-end mb-8">
             {user.profile_image && (
-              <img
+              <Image
                 src={user.profile_image}
                 alt="User Profile"
                 className="w-10 h-10 rounded-full mr-3 border-2 border-purple-400"
+                width={40} // 이미지 너비
+                height={40} // 이미지 높이
               />
             )}
             <span className="text-lg font-semibold text-slate-700">{user.nickname || '사용자'}</span>

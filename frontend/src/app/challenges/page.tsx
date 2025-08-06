@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import Image from 'next/image'; // Image 컴포넌트 임포트
 import { Droplets, Dumbbell, BookOpen, ArrowRight, Sparkles, Users } from 'lucide-react';
 
 interface Participant {
@@ -142,12 +143,14 @@ const ChallengesPage = () => {
                       onMouseLeave={closeParticipantsPopup}
                     >
                       {(challenge.participantsPreview || []).map((participant, idx) => (
-                        <img
+                        <Image
                           key={idx}
                           className="inline-block h-8 w-8 rounded-full ring-2 ring-white"
                           src={participant.profilePictureUrl || 'https://via.placeholder.com/150'} // 기본 이미지
                           alt={participant.nickname || '참여자'}
                           title={participant.nickname || '참여자'}
+                          width={32} // 이미지 너비
+                          height={32} // 이미지 높이
                         />
                       ))}
                       {challenge._count.userChallenges > 5 && (
@@ -186,10 +189,12 @@ const ChallengesPage = () => {
             <div className="space-y-2">
               {participantsPopupData.participants.map((participant, idx) => (
                 <div key={idx} className="flex items-center">
-                  <img
+                  <Image
                     className="inline-block h-8 w-8 rounded-full ring-1 ring-gray-300 mr-2"
                     src={participant.profilePictureUrl || 'https://via.placeholder.com/150'}
                     alt={participant.nickname || '참여자'}
+                    width={32} // 이미지 너비
+                    height={32} // 이미지 높이
                   />
                   <span className="text-sm text-gray-800">{participant.nickname}</span>
                 </div>

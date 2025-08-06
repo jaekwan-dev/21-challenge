@@ -154,7 +154,7 @@ router.get('/:challengeId/user-status/:userId', async (req: Request, res) => {
     const userChallenge = await req.prisma.userChallenge.findUnique({
       where: {
         userId_challengeId: {
-          userId,
+          userId: userId!,
           challengeId: parsedChallengeId,
         },
       },
