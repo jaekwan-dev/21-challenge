@@ -59,7 +59,7 @@ router.get('/kakao/callback', async (req, res) => {
 
     // 프론트엔드로 리디렉션하면서 사용자 정보를 쿼리 파라미터로 전달
     // 여기서는 DB에 저장된 user 객체의 kakaoId를 userId로 사용
-    res.redirect(`http://localhost:3000/login/success?userId=${encodeURIComponent(user.kakaoId)}`);
+    res.redirect(`${process.env.FRONTEND_URL}/login/success?userId=${encodeURIComponent(user.kakaoId)}`);
 
   } catch (error) {
     console.error(error);

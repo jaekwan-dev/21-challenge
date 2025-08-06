@@ -7,7 +7,7 @@ import Image from 'next/image'; // Image 컴포넌트 임포트
 
 const LoginPage = () => {
   const handleKakaoLogin = () => {
-    window.location.href = 'http://localhost:8080/auth/kakao';
+    window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/kakao`;
   };
 
   return (
