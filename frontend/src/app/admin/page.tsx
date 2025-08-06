@@ -32,7 +32,7 @@ const AdminPage = () => {
 
   const fetchChallenges = async () => {
     try {
-      const response = await fetch('http://localhost:8080/challenges');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/challenges`);
       const data = await response.json();
       setChallenges(data);
     } catch (error) {
@@ -45,14 +45,14 @@ const AdminPage = () => {
       let response;
       if (challenge.id) {
         // 수정
-        response = await fetch(`http://localhost:8080/challenges/${challenge.id}`, {
+        response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/challenges/${challenge.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ title: challenge.title, description: challenge.description }),
         });
       } else {
         // 생성
-        response = await fetch('http://localhost:8080/challenges', {
+        response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/challenges`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ title: challenge.title, description: challenge.description }),
@@ -74,7 +74,7 @@ const AdminPage = () => {
   const handleDeleteChallenge = async (id: number) => {
     if (window.confirm('정말로 이 챌린지를 삭제하시겠습니까?')) {
       try {
-        const response = await fetch(`http://localhost:8080/challenges/${id}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/challenges/${id}`, {
           method: 'DELETE',
         });
         if (response.ok) {

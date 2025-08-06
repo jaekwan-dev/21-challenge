@@ -42,7 +42,7 @@ const ChallengeDetailPage = () => {
   useEffect(() => {
     const fetchChallengeDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/challenges/${challengeId}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/challenges/${challengeId}`);
         if (!response.ok) {
           throw new Error('챌린지 정보를 가져오는데 실패했습니다.');
         }
@@ -58,7 +58,7 @@ const ChallengeDetailPage = () => {
       if (!user?.id) return; // 사용자 ID가 없으면 요청하지 않음
 
       try {
-        const response = await fetch(`http://localhost:8080/challenges/${challengeId}/user-status/${user.id}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/challenges/${challengeId}/user-status/${user.id}`);
         if (response.ok) {
           const data = await response.json();
           setDailyStatus(data.dailyStatus);
@@ -96,7 +96,7 @@ const ChallengeDetailPage = () => {
 
   const updateChallengeStatusBackend = async (status: boolean[], currentUserId: string, currentStartDate: string) => {
     try {
-      await fetch(`http://localhost:8080/challenges/${challengeId}/status`, {
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/challenges/${challengeId}/status`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ const ChallengeDetailPage = () => {
 
   const fetchCommunityStatus = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/challenges/${challengeId}/community-status`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/challenges/${challengeId}/community-status`);
       const data = await response.json();
       setCommunityStatus(data);
     } catch (error) {

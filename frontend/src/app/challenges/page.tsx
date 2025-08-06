@@ -44,7 +44,7 @@ const ChallengesPage = () => {
   useEffect(() => {
     const fetchChallenges = async () => {
       try {
-        const response = await fetch('http://localhost:8080/challenges');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/challenges`);
         const data = await response.json();
         setChallenges(data);
       } catch (error) {
@@ -60,7 +60,7 @@ const ChallengesPage = () => {
 
   const fetchParticipants = async (challengeId: number, challengeTitle: string, event: React.MouseEvent) => {
     try {
-      const response = await fetch(`http://localhost:8080/challenges/${challengeId}/participants`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/challenges/${challengeId}/participants`);
       const data = await response.json();
       setParticipantsPopupData({ challengeTitle, participants: data });
       setPopupPosition({ x: event.clientX, y: event.clientY });
