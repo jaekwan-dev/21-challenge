@@ -31,3 +31,12 @@ app.listen(port, () => {
 process.on('beforeExit', async () => {
   await prisma.$disconnect();
 });
+
+// 모든 UserChallenge 데이터 삭제
+const deleteAllUserChallenges = async () => {
+  await prisma.userChallenge.deleteMany({});
+};
+
+deleteAllUserChallenges().then(() => {
+  console.log('All UserChallenge data deleted.');
+});
